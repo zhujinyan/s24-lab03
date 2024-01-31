@@ -38,8 +38,8 @@ public class IntQueueTest {
     @Before
     public void setUp() {
         // comment/uncomment these lines to test each class
-        mQueue = new LinkedIntQueue();
-    //    mQueue = new ArrayIntQueue();
+        // mQueue = new LinkedIntQueue();
+       mQueue = new ArrayIntQueue();
 
         testList = new ArrayList<>(List.of(1, 2, 3));
     }
@@ -52,22 +52,37 @@ public class IntQueueTest {
 
     @Test
     public void testNotEmpty() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+        // add integer into queue
+        mQueue.enqueue(testList.get(0));
+
+        // if queue is empty, assert it as false
+        assertFalse(mQueue.isEmpty());
     }
 
     @Test
     public void testPeekEmptyQueue() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+        // call peek(); if the return value is null, the queue is empty (True)
+        assertTrue(mQueue.peek() == null);
     }
 
     @Test
     public void testPeekNoEmptyQueue() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+        // add integer into the queue
+        mQueue.enqueue(testList.get(0));
+
+        // call peek(); if the return value is not null, the queue is not empty (True)
+        assertTrue(mQueue.peek() != null);
     }
 
+    @Test
+    public void testClear() {
+        // Call Clear()
+        mQueue.clear();
+
+        // Check the status of queue
+        assertTrue(mQueue.size() == 0);
+    }
+    
     @Test
     public void testEnqueue() {
         // This is an example unit test
@@ -79,9 +94,61 @@ public class IntQueueTest {
     }
 
     @Test
-    public void testDequeue() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+    public void testDequeueNotNull() {
+        // If queue is not empty
+        while (mQueue.size() != 0) {
+            // Get the head value
+            int headVal = mQueue.peek();
+
+            // Record queue size
+            int qSize = mQueue.size();
+
+            // Dequeue
+            int deHead = mQueue.dequeue();
+
+            // Assert if the head is dequeued
+            assertEquals(headVal, deHead);
+            assertEquals(qSize - 1, mQueue.size());
+        }
+    }
+
+    @Test
+    public void testDequeueNull() {
+        // get head element (null)
+        Integer lastHead = mQueue.dequeue();
+
+        // Check if the head is null
+        assertEquals(lastHead, null);
+
+        // Check if the size is 0
+        assertEquals(0, mQueue.size());
+    }
+
+    @Test
+    public void testensureCapacity() {
+        // add elements to queue (3 times, 9 ints will be added)
+        for (int j = 0; j < 3; j++)
+            for (int i = 0; i < testList.size(); i++) 
+                mQueue.enqueue(testList.get(i));
+        
+        // Check the size; should be 3 * 3 = 9
+        assertEquals(mQueue.size(), testList.size() * 3);
+        // Check the head of queue; should be equal to the 1st element of testList
+        assertEquals(testList.get(0), mQueue.peek());
+
+        // dequeue; aim to move the head; now 8 elements in queue
+        mQueue.dequeue();
+
+        // Check the size; should be 9 - 1 = 8
+        assertEquals(mQueue.size(), testList.size() * 3 - 1);
+        
+        // add another 3 elements to queue
+        // will be 11 elements in queue; need to extend queue
+        for (int i = 0; i < testList.size(); i++) 
+                mQueue.enqueue(testList.get(i));
+        
+        // Check the size; should be 11
+        assertEquals(mQueue.size(), testList.size() * 4 - 1);
     }
 
     @Test
